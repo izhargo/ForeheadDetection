@@ -1,11 +1,10 @@
 from forehead_search import config
-from torch.nn import ConvTranspose2d, Conv2d, MaxPool2d, Module, ModuleList, ReLU, MSELoss
+from torch.nn import ConvTranspose2d, Conv2d, MaxPool2d, Module, ModuleList, ReLU, MSELoss, BCEWithLogitsLoss
 from torchvision.transforms import CenterCrop
+
 from torch.nn import functional as F
 from typing import Tuple
 import torch
-import torchvision
-
 
 
 class Block(Module):
@@ -15,6 +14,7 @@ class Block(Module):
 		self.conv1 = Conv2d(inChannels, outChannels, 3)
 		self.relu = ReLU()
 		self.conv2 = Conv2d(outChannels, outChannels, 3)
+	
 	def forward(self, x):
 		# apply CONV => RELU => CONV block to the inputs and return it
 		return self.conv2(self.relu(self.conv1(x)))
@@ -28,6 +28,7 @@ class Encoder(Module):
 			[Block(channels[i], channels[i + 1])
 			 	for i in range(len(channels) - 1)])
 		self.pool = MaxPool2d(2)
+	
 	def forward(self, x):
 		# initialize an empty list to store the intermediate outputs
 		blockOutputs = []
@@ -54,6 +55,7 @@ class Decoder(Module):
 		self.dec_blocks = ModuleList(
 			[Block(channels[i], channels[i + 1])
 			 	for i in range(len(channels) - 1)])
+	
 	def forward(self, x, encFeatures):
 		# loop through the number of channels
 		for i in range(len(self.channels) - 1):
@@ -68,11 +70,12 @@ class Decoder(Module):
 			x = self.dec_blocks[i](x)
 		# return the final decoder output
 		return x
+	
 	def crop(self, encFeatures, x):
 		# grab the dimensions of the inputs, and crop the encoder
 		# features to match the dimensions
 		(_, _, H, W) = x.shape
-		encFeatures = CenterCrop([H, W])(encFeatures)
+		encFeatures = CenterCrop([H, W])(encFeatures) # encFeature to fit x size
 		# return the cropped features
 		return encFeatures
 	
@@ -108,41 +111,29 @@ class UNet(Module):
 
 # Object Localization Loss
 class ObjLocLoss( Module ):
-	def __init__( self, numCls: int, λ: float, ϵ: float = 0.0 ) -> None:
+	def __init__(self, numCls: int, λ: float) -> None:
 		super(ObjLocLoss, self).__init__()
-
-		self.numCls     = numCls
-		self.λ          = λ
-		self.ϵ          = ϵ
-		self.oMseLoss   = MSELoss()
+		self.numCls = numCls
+		self.λ = λ
+		self.bce = BCEWithLogitsLoss()
 	
 	def forward(self, mYHat: torch.Tensor, mY: torch.Tensor ) -> torch.Tensor:
-
-		mseLoss = self.oMseLoss(mYHat[:, self.numCls:], mY[:, 1:])
-
-		lossVal = (self.λ * mseLoss)
-		
-		return lossVal
-
+		return self.λ * self.bce(mYHat[:, :self.numCls], mY)
+	
 
 # Object Localization Score
 class ObjLocScore(Module):
-	def __init__(self, numCls: int) -> None:
+	def __init__(self, numCls: int, threshold: float) -> None:
 		super(ObjLocScore, self).__init__()
-
 		self.numCls = numCls
+		self.threshold = threshold
 	
 	def forward(self, mYHat: torch.Tensor, mY: torch.Tensor ) -> Tuple[float, float, float]:
-
 		batchSize = mYHat.shape[0]
-		
-		vY, mBox = mY[:, 0].to(torch.long), mY[:, 1:]
+		pred_sig = torch.sigmoid(mYHat[:, :self.numCls])
+		pred_sig = (pred_sig > self.threshold).float()
 
-		vIoU = torch.diag(torchvision.ops.box_iou(torchvision.ops.box_convert(mYHat[:, self.numCls:], 'cxcywh', 'xyxy'), torchvision.ops.box_convert(mBox, 'cxcywh', 'xyxy')))
-		vCor = (vY == torch.argmax(mYHat[:, :self.numCls], dim = 1)).to(torch.float32) #<! Correct labels
-
-		# valIoU      = torch.mean(vIoU).item()
-		# valAcc      = torch.mean(vCor).item()
-		valScore    = torch.inner(vIoU, vCor) / batchSize
-		
-		return valScore
+		intersection = (pred_sig * mY).sum()
+		union = pred_sig.sum() + mY.sum()
+		dice = (2. * intersection + 1e-8) / (union + 1e-8)
+		return dice / batchSize

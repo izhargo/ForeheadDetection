@@ -32,8 +32,8 @@ NUM_LEVELS = 3
 # initialize learning rate, number of epochs to train for, and the
 # batch size
 INIT_LR = 0.001
-NUM_EPOCHS = 40
-BATCH_SIZE = 64
+NUM_EPOCHS = 10
+BATCH_SIZE = 128
 L_CLASSES  = ['R', 'G', 'B']
 numCls = len(L_CLASSES)
 # define the input image dimensions
@@ -51,4 +51,5 @@ TEST_PATHS = os.path.sep.join([BASE_OUTPUT, 'test_paths.txt'])
 
 λ = 20.0 #<! Localization Loss
 ϵ = 0.1 #<! Label Smoothing
+SIG_THRESHOLD = 0.5
 
