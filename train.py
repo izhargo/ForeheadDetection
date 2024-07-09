@@ -87,3 +87,4 @@ if __name__ == "__main__":
     _, lTrainLoss, lTrainScore, lValLoss, lValScore, lLearnRate = TrainModel(
         unet, trainLoader, valLoader, oOpt, config.NUM_EPOCHS, hL, hS, oSch = oSch
         )
+    torch.save(unet, config.MODEL_PATH)
