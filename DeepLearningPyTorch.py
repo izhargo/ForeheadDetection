@@ -42,7 +42,7 @@ from DeepLearningBlocks import NNMode
 
 
 # Typing
-from typing import Any, Callable, Dict, Generator, List, Optional, Self, Set, Tuple, Union
+from typing import Any, Callable, Dict, Generator, List, Optional, Set, Tuple, Union
 
 # Auxiliary Classes
 
@@ -95,11 +95,11 @@ class ObjectLocalizationDataset( Dataset ):
         self.singleY = singleY #<! Return label and box, or a single vector
         self.numSamples = tX.shape[0]
 
-    def __len__( self: Self ) -> int:
+    def __len__( self ) -> int:
         
         return self.numSamples
 
-    def __getitem__( self: Self, idx: int ) -> Union[Tuple[np.ndarray, int, np.ndarray], Tuple[np.ndarray, np.ndarray]]:
+    def __getitem__( self, idx: int ) -> Union[Tuple[np.ndarray, int, np.ndarray], Tuple[np.ndarray, np.ndarray]]:
         
         tXi   = self.tX[idx] #<! Image
         valYi = self.vY[idx] #<! Label
@@ -354,7 +354,9 @@ def TrainModel( oModel: nn.Module, dlTrain: DataLoader, dlVal: DataLoader, oOpt:
     bestScore = -1e9 #<! Assuming higher is better
 
     learnRate = oOpt.param_groups[0]['lr']
-
+    s = 32
+    dev = torch.device('cuda')
+    torch.nn.functional.conv2d(torch.zeros(s, s, s, s, device=dev), torch.zeros(s, s, s, s, device=dev))
     for ii in range(numEpoch):
         startTime           = time.time()
         trainLoss, trainScr = RunEpoch(oModel, dlTrain, hL, hS, oOpt, opMode = NNMode.TRAIN) #<! Train
@@ -484,7 +486,7 @@ class ResidualBlock( nn.Module ):
         self.oBatchNorm2    = nn.BatchNorm2d(numChnl)
         self.oReLU2         = nn.ReLU(inplace = True) #<! No need for it, for better visualization
             
-    def forward( self: Self, tX: torch.Tensor ) -> torch.Tensor:
+    def forward( self, tX: torch.Tensor ) -> torch.Tensor:
         
         tY = self.oReLU1(self.oBatchNorm1(self.oConv2D1(tX)))
         tY = self.oBatchNorm2(self.oConv2D2(tY))

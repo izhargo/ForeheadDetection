@@ -28,8 +28,8 @@ from DeepLearningPyTorch import TrainModel
 # # write the testing image paths to disk so that we can use then
 # # when evaluating/testing our model
 
-if __name__ == "__main__":   
-
+if __name__ == "__main__":
+      
     trainImages = sorted(list(paths.list_images(config.TRAIN_IMAGES_FOLDER)))
     trainMasks = sorted(list(paths.list_images(config.TRAIN_MASKS_FOLDER)))
 

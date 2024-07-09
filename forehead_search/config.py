@@ -33,7 +33,7 @@ NUM_LEVELS = 3
 # batch size
 INIT_LR = 0.001
 NUM_EPOCHS = 10
-BATCH_SIZE = 128
+BATCH_SIZE = 64
 L_CLASSES  = ['R', 'G', 'B']
 numCls = len(L_CLASSES)
 # define the input image dimensions
@@ -45,7 +45,7 @@ THRESHOLD = 0.5
 BASE_OUTPUT = 'output'
 # define the path to the output serialized model, model training
 # plot, and testing image paths
-MODEL_PATH = os.path.join(BASE_OUTPUT, 'unet_tgs_salt.pth')
+MODEL_PATH = os.path.join(BASE_OUTPUT, 'unet.pth')
 PLOT_PATH = os.path.sep.join([BASE_OUTPUT, 'plot.png'])
 TEST_PATHS = os.path.sep.join([BASE_OUTPUT, 'test_paths.txt'])
 
