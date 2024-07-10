@@ -1,4 +1,5 @@
 from typing import List
+import numpy as np
 import cv2
 import os
 import json
@@ -21,3 +22,24 @@ def get_bbox(filename: str, dirname: str) -> List[float]:
     with open(json_file, 'r') as f:
         bbox = json.load(f)['bbox']
     return bbox
+
+def create_mask_from_bbox(image_path, bounding_box):
+    image = cv2.imread(image_path)
+    
+    if image is None:
+        raise ValueError("Image not found or unable to load.")
+    
+    height, width = image.shape[:2]
+    
+    mask = np.zeros((height, width), dtype=np.float32)
+    
+    x_min, y_min, x_max, y_max = bounding_box
+    
+    x_min = int(x_min * width)
+    y_min = int(y_min * height)
+    x_max = int(x_max * width)
+    y_max = int(y_max * height)
+    
+    mask[y_min:y_max, x_min:x_max] = 255
+        
+    return mask

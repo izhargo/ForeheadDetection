@@ -6,14 +6,20 @@ DATA_FOLDER = os.path.join('data', 'Forehead')
 TRAIN_IMAGES_FOLDER = os.path.join(DATA_FOLDER, 'train', 'images')
 TRAIN_LABELS_FOLDER = os.path.join(DATA_FOLDER, 'train', 'labels')
 TRAIN_MASKS_FOLDER = os.path.join(DATA_FOLDER, 'train', 'masks')
+TRAIN_BIN_MASKS_FOLDER = os.path.join(DATA_FOLDER, 'train', 'bin_masks')
+
 
 VAL_IMAGES_FOLDER = os.path.join(DATA_FOLDER, 'val', 'images')
 VAL_LABELS_FOLDER = os.path.join(DATA_FOLDER, 'val', 'labels')
 VAL_MASKS_FOLDER = os.path.join(DATA_FOLDER, 'val', 'masks')
+VAL_BIN_MASKS_FOLDER = os.path.join(DATA_FOLDER, 'val', 'bin_masks')
+
 
 TEST_IMAGES_FOLDER = os.path.join(DATA_FOLDER, 'test', 'images')
 TEST_LABELS_FOLDER = os.path.join(DATA_FOLDER, 'test', 'labels')
 TEST_MASKS_FOLDER = os.path.join(DATA_FOLDER, 'test', 'masks')
+TEST_BIN_MASKS_FOLDER = os.path.join(DATA_FOLDER, 'test', 'bin_masks')
+
 
 KEY_TO_FOLDER = {
     'train': {'images': TRAIN_IMAGES_FOLDER, 'labels': TRAIN_LABELS_FOLDER},
@@ -33,7 +39,7 @@ NUM_LEVELS = 3
 # batch size
 INIT_LR = 0.001
 NUM_EPOCHS = 10
-BATCH_SIZE = 32
+BATCH_SIZE = 8
 L_CLASSES  = ['R', 'G', 'B']
 numCls = len(L_CLASSES)
 # define the input image dimensions

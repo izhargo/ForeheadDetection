@@ -148,7 +148,7 @@ def GenDataLoaders( dsTrain: Dataset, dsVal: Dataset, batchSize: int, *, numWork
 
     return dlTrain, dlVal
 
-def RunEpoch( oModel: nn.Module, dlData: DataLoader, hL: Callable, hS: Callable, oOpt: Optional[Optimizer] = None, opMode: NNMode = NNMode.TRAIN ) -> Tuple[float, float]:
+def RunEpoch( oModel: nn.Module, dlData: DataLoader, hL: Callable, hS: Callable, oOpt: Optional[Optimizer] = None, opMode: NNMode = NNMode.TRAIN) -> Tuple[float, float]:
     """
     Runs a single Epoch (Train / Test) of a model.  
     Input:
@@ -354,9 +354,7 @@ def TrainModel( oModel: nn.Module, dlTrain: DataLoader, dlVal: DataLoader, oOpt:
     bestScore = -1e9 #<! Assuming higher is better
 
     learnRate = oOpt.param_groups[0]['lr']
-    s = 32
-    dev = torch.device('cuda')
-    torch.nn.functional.conv2d(torch.zeros(s, s, s, s, device=dev), torch.zeros(s, s, s, s, device=dev))
+    
     for ii in range(numEpoch):
         startTime           = time.time()
         trainLoss, trainScr = RunEpoch(oModel, dlTrain, hL, hS, oOpt, opMode = NNMode.TRAIN) #<! Train

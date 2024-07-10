@@ -109,7 +109,6 @@ class UNet(Module):
 		return map
 
 
-# Object Localization Loss
 class ObjLocLoss( Module ):
 	def __init__(self, numCls: int, λ: float) -> None:
 		super(ObjLocLoss, self).__init__()
@@ -121,7 +120,6 @@ class ObjLocLoss( Module ):
 		return self.λ * self.bce(mYHat[:, :self.numCls], mY)
 	
 
-# Object Localization Score
 class ObjLocScore(Module):
 	def __init__(self, numCls: int, threshold: float) -> None:
 		super(ObjLocScore, self).__init__()
@@ -137,3 +135,7 @@ class ObjLocScore(Module):
 		union = pred_sig.sum() + mY.sum()
 		dice = (2. * intersection + 1e-8) / (union + 1e-8)
 		return dice / batchSize
+
+class DivideBy255(object):
+    def __call__(self, tensor):
+        return tensor / 255.0
