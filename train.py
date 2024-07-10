@@ -37,7 +37,7 @@ if __name__ == "__main__":
         batch_size=config.BATCH_SIZE, pin_memory=config.PIN_MEMORY, num_workers=os.cpu_count()
         )
     valLoader = DataLoader(valDS, shuffle=True,
-        batch_size=config.BATCH_SIZE, pin_memory=config.PIN_MEMORY, num_workers=os.cpu_count()
+        batch_size=config.BATCH_SIZE*2, pin_memory=config.PIN_MEMORY, num_workers=os.cpu_count()
         )
     # testLoader = DataLoader(testDS, shuffle=False,
     #     batch_size=config.BATCH_SIZE, pin_memory=config.PIN_MEMORY, num_workers=os.cpu_count()
