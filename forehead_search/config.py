@@ -33,7 +33,7 @@ NUM_LEVELS = 3
 # batch size
 INIT_LR = 0.001
 NUM_EPOCHS = 10
-BATCH_SIZE = 64
+BATCH_SIZE = 32
 L_CLASSES  = ['R', 'G', 'B']
 numCls = len(L_CLASSES)
 # define the input image dimensions

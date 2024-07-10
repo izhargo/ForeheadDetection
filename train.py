@@ -67,9 +67,9 @@ if __name__ == "__main__":
     valLoader = DataLoader(valDS, shuffle=True,
         batch_size=config.BATCH_SIZE, pin_memory=config.PIN_MEMORY, num_workers=os.cpu_count()
         )
-    testLoader = DataLoader(testDS, shuffle=False,
-        batch_size=config.BATCH_SIZE, pin_memory=config.PIN_MEMORY, num_workers=os.cpu_count()
-        )
+    # testLoader = DataLoader(testDS, shuffle=False,
+    #     batch_size=config.BATCH_SIZE, pin_memory=config.PIN_MEMORY, num_workers=os.cpu_count()
+    #     )
 
 
     hL = ObjLocLoss(config.numCls, config.λ)
