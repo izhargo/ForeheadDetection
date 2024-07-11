@@ -21,7 +21,7 @@ class Block(Module):
 	
 
 class Encoder(Module):
-	def __init__(self, channels=(3, 16, 32, 64)):
+	def __init__(self, channels=(3, 16, 32, 64, 128, 256, 512, 1024)):
 		super().__init__()
 		# store the encoder blocks and maxpooling layer
 		self.encBlocks = ModuleList(
@@ -44,7 +44,7 @@ class Encoder(Module):
 	
 
 class Decoder(Module):
-	def __init__(self, channels=(64, 32, 16)):
+	def __init__(self, channels=(1024, 512, 256, 128, 64, 32, 16)):
 		super().__init__()
 		# initialize the number of channels, upsampler blocks, and
 		# decoder blocks
