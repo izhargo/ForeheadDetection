@@ -12,7 +12,7 @@ from forehead_search.dataset import ForeheadDataset
 from forehead_search.model import UNet, ObjLocLoss, ObjLocScore, DivideBy255
 
 if __name__ == "__main__":   
-
+    
     images = sorted(list(paths.list_images(config.TRAIN_IMAGES_FOLDER)))
     masks = sorted(list(paths.list_files(config.TRAIN_BIN_MASKS_FOLDER, validExts='npy')))
     
