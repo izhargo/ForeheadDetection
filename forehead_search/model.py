@@ -21,7 +21,7 @@ class Block(Module):
 	
 
 class Encoder(Module):
-	def __init__(self, channels=(3, 16, 32, 64, 128, 256, 512, 1024)):
+	def __init__(self, channels):
 		super().__init__()
 		# store the encoder blocks and maxpooling layer
 		self.encBlocks = ModuleList(
@@ -44,7 +44,7 @@ class Encoder(Module):
 	
 
 class Decoder(Module):
-	def __init__(self, channels=(1024, 512, 256, 128, 64, 32, 16)):
+	def __init__(self, channels):
 		super().__init__()
 		# initialize the number of channels, upsampler blocks, and
 		# decoder blocks
@@ -81,7 +81,7 @@ class Decoder(Module):
 	
 
 class UNet(Module):
-	def __init__(self, encChannels=(3, 16, 32, 64), decChannels=(64, 32, 16), nbClasses=1, retainDim=True, outSize=(config.INPUT_IMAGE_HEIGHT,  config.INPUT_IMAGE_WIDTH)):
+	def __init__(self, encChannels=(3, 16, 32, 64, 128, 256, 512), decChannels=(512, 256, 128, 64, 32, 16), nbClasses=1, retainDim=True, outSize=(config.INPUT_IMAGE_HEIGHT,  config.INPUT_IMAGE_WIDTH)):
 		super().__init__()
 		# initialize the encoder and decoder
 		self.encoder = Encoder(encChannels)

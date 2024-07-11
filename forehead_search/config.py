@@ -55,7 +55,7 @@ MODEL_PATH = os.path.join(BASE_OUTPUT, 'unet.pth')
 PLOT_PATH = os.path.sep.join([BASE_OUTPUT, 'plot.png'])
 TEST_PATHS = os.path.sep.join([BASE_OUTPUT, 'test_paths.txt'])
 
-λ = 20.0 #<! Localization Loss
+λ = 1.0 #<! Localization Loss
 ϵ = 0.1 #<! Label Smoothing
 SIG_THRESHOLD = 0.5
 
