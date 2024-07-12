@@ -4,6 +4,7 @@ from imutils import paths
 from torch.optim import AdamW
 from torch.utils.data import DataLoader
 from torchvision import transforms
+from sklearn.model_selection import train_test_split
 
 from DeepLearningPyTorch import TrainModel
 from forehead_search import config
@@ -11,16 +12,12 @@ from forehead_search.dataset import ForeheadDataset
 from forehead_search.model import UNet, ObjLocLoss, ObjLocScore, DivideBy255
 
 if __name__ == "__main__":   
-
-    trainImages = sorted(list(paths.list_images(config.TRAIN_IMAGES_FOLDER)))
-    trainMasks = sorted(list(paths.list_files(config.TRAIN_BIN_MASKS_FOLDER, validExts='npy')))
-
-    valImages = sorted(list(paths.list_images(config.VAL_IMAGES_FOLDER)))
-    valMasks = sorted(list(paths.list_files(config.VAL_BIN_MASKS_FOLDER, validExts='npy')))
-
-    testImages = sorted(list(paths.list_images(config.TEST_IMAGES_FOLDER)))
-    testMasks = sorted(list(paths.list_files(config.TEST_BIN_MASKS_FOLDER, validExts='npy')))
-
+    
+    images = sorted(list(paths.list_images(config.TRAIN_IMAGES_FOLDER)))
+    masks = sorted(list(paths.list_files(config.TRAIN_BIN_MASKS_FOLDER, validExts='npy')))
+    
+    trainImages, valImages, trainMasks , valMasks = train_test_split(images, masks, test_size = 0.2, train_size = 0.8, shuffle = True, random_state=42)
+    
     transforms = transforms.Compose([transforms.ToPILImage(),
         transforms.Resize((config.INPUT_IMAGE_HEIGHT,
             config.INPUT_IMAGE_WIDTH)),
@@ -28,10 +25,10 @@ if __name__ == "__main__":
     # create the train and test datasets
     trainDS = ForeheadDataset(imagePaths=trainImages, maskPaths=trainMasks, transforms=transforms)
     valDS = ForeheadDataset(imagePaths=valImages, maskPaths=valMasks, transforms=transforms)
-    testDS = ForeheadDataset(imagePaths=testImages, maskPaths=testMasks, transforms=transforms)
+    # testDS = ForeheadDataset(imagePaths=testImages, maskPaths=testMasks, transforms=transforms)
     print(f"[INFO] found {len(trainDS)} examples in the training set...")
     print(f"[INFO] found {len(valDS)} examples in the training set...")
-    print(f"[INFO] found {len(testDS)} examples in the test set...")
+    # print(f"[INFO] found {len(testDS)} examples in the test set...")
     # create the training and test data loaders
     # TODO: add num_workers=os.cpu_count()
     trainLoader = DataLoader(trainDS, shuffle=True,
