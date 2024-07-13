@@ -1,9 +1,10 @@
+*.tat.gz
 backup
-output
+output/
 wandb
 BestModel.pt
 data.tar.gz
-data
+data/
 __pycache__
 .DS_Store
 # Byte-compiled / optimized / DLL files
