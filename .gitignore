@@ -1,3 +1,4 @@
+*.pt
 *.tar.gz
 backup
 output/

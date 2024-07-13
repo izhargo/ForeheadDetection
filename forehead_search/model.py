@@ -197,7 +197,7 @@ class ObjFocalLoss(nn.Module):
 		self.focal_loss = sigmoid_focal_loss
 	 
 	def forward(self, mYHat: torch.Tensor, mY: torch.Tensor ) -> torch.Tensor:
-		return self.λ * self.focal_loss(mYHat[:, :self.numCls], mY, alpha=self.α)
+		return self.λ * self.focal_loss(mYHat[:, :self.numCls], mY, alpha=self.α, reduction='mean')
 
 class ObjLocLoss(nn.Module):
 	def __init__(self, numCls: int, λ: float) -> None:

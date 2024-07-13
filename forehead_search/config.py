@@ -51,10 +51,11 @@ THRESHOLD = 0.5
 BASE_OUTPUT = 'output'
 # define the path to the output serialized model, model training
 # plot, and testing image paths
-MODEL_PATH = os.path.join(BASE_OUTPUT, 'unet.pth')
-PLOT_PATH = os.path.sep.join([BASE_OUTPUT, 'plot.png'])
+MODEL_PATH = os.path.join(BASE_OUTPUT, 'focal_unet.pth')
+PLOT_PATH = os.path.sep.join([BASE_OUTPUT, 'focal_plot.png'])
 TEST_PATHS = os.path.sep.join([BASE_OUTPUT, 'test_paths.txt'])
 
+α = 0.05
 λ = 0.1 #<! Localization Loss
 ϵ = 0.1 #<! Label Smoothing
 SIG_THRESHOLD = 0.5

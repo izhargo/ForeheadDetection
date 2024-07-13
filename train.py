@@ -12,7 +12,8 @@ from DeepLearningPyTorch import TrainModel
 import utils
 from forehead_search import config
 from forehead_search.dataset import ForeheadDataset
-from forehead_search.model import UNet, ObjLocLoss, ObjLocScore, DivideBy255
+from forehead_search.model import UNet, ObjLocLoss, ObjLocScore, DivideBy255, ObjFocalLoss
+
 
 if __name__ == "__main__":   
     
@@ -39,7 +40,9 @@ if __name__ == "__main__":
         batch_size=config.BATCH_SIZE*2, pin_memory=config.PIN_MEMORY, num_workers=os.cpu_count()
         )
 
-    hL = ObjLocLoss(config.numCls, config.λ)
+    hL = ObjFocalLoss(config.numCls, config.λ, config.α)
+    # hL = ObjLocLoss(config.numCls, config.λ)
+
     hL = hL.to(config.DEVICE)
     hS = ObjLocScore(config.numCls, config.SIG_THRESHOLD)
     hS = hS.to(config.DEVICE)

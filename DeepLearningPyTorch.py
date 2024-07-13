@@ -392,7 +392,7 @@ def TrainModel( oModel: nn.Module, dlTrain: DataLoader, dlVal: DataLoader, oOpt:
                 dCheckPoint = {'Model': oModel.state_dict(), 'Optimizer': oOpt.state_dict()}
                 if oSch is not None:
                     dCheckPoint['Scheduler'] = oSch.state_dict()
-                torch.save(dCheckPoint, 'BestModel.pt')
+                torch.save(dCheckPoint, 'FocalBestModel.pt')
                 print(' | <-- Checkpoint!', end = '')
             except:
                 print(' | <-- Failed!', end = '')
