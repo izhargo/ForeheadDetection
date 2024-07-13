@@ -1,4 +1,4 @@
-*.tat.gz
+*.tar.gz
 backup
 output/
 wandb
