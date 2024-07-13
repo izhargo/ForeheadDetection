@@ -1,3 +1,5 @@
+backup
+output
 wandb
 BestModel.pt
 data.tar.gz
