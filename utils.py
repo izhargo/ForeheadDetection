@@ -3,6 +3,9 @@ import numpy as np
 import cv2
 import os
 import json
+from pathlib import Path
+import random
+from imutils import paths
 
 
 def draw_bounding_box(image, bbox, color=(255, 0, 0), thickness=2):
@@ -43,3 +46,27 @@ def create_mask_from_bbox(image_path, bounding_box):
     mask[y_min:y_max, x_min:x_max] = 255
         
     return mask
+
+
+def train_val_split_by_lead_num(images, masks):
+    validation_size = len(images) // 9 // 5
+    nums = list(range(1, (len(images)) // 9))
+    val_leading_num = random.choices(nums, k=validation_size)
+    train_images, val_images, train_masks, val_masks = [], [], [], []
+    for img in images:
+        filename = Path(img).stem
+        file_lead_num = int(filename.split('.')[0])
+        if file_lead_num in val_leading_num:
+            val_images.append(img)
+        else:
+            train_images.append(img)
+    
+    for mask in masks:
+        mask_filename = Path(mask).stem
+        mask_lead_num = int(mask_filename.split('.')[0])
+        if mask_lead_num in val_leading_num:
+            val_masks.append(mask)
+        else:
+            train_masks.append(mask)
+    
+    return sorted(train_images), sorted(val_images), sorted(train_masks), sorted(val_masks)
